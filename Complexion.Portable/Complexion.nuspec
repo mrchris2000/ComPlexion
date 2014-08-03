@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
    <metadata minClientVersion="2.7.2">
        <id>Complexion</id>
-       <version>0.1.15-alpha</version>
+       <version>0.1.16-alpha</version>
        <title>Complexion Plex Media Server API</title>
        <authors>Jim Bennett</authors>
        <owners>Jim Bennett</owners>
@@ -21,7 +21,7 @@
        </dependencies>
    </metadata>
    <files>
-     <file src="bin\Debug\Complexion.Portable.dll" target="lib\portable-net45+win+wp80+MonoAndroid10+MonoTouch10\Complexion.Portable.dll" />
-     <file src="bin\Debug\Complexion.Portable.pdb" target="lib\portable-net45+win+wp80+MonoAndroid10+MonoTouch10\Complexion.Portable.pdb" />
+     <file src="bin\Release\Complexion.Portable.dll" target="lib\portable-net45+win+wp80+MonoAndroid10+MonoTouch10\Complexion.Portable.dll" />
+     <file src="bin\Release\Complexion.Portable.pdb" target="lib\portable-net45+win+wp80+MonoAndroid10+MonoTouch10\Complexion.Portable.pdb" />
    </files>
 </package>
