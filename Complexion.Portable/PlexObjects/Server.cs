@@ -13,7 +13,7 @@ namespace Complexion.Portable.PlexObjects
         private readonly Device _device;
         private readonly string _username;
         private readonly string _password;
-        private readonly string _connectionUri;
+        private string _connectionUri;
 
         private MediaContainer _mediaContainer;
 
@@ -68,8 +68,11 @@ namespace Complexion.Portable.PlexObjects
             {
                 try
                 {
-                    if (await TryConnectionAsync(connection.uri, username, password)) 
+                    if (await TryConnectionAsync(connection.uri, username, password))
+                    {
+                        _connectionUri = connection.uri;
                         return;
+                    }
                 }
                 catch (Exception ex)
                 {
