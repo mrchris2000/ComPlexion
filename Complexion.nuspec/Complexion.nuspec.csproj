@@ -52,8 +52,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>$(SolutionDir).nuget\NuGet.exe pack $(ProjectDir)Complexion.nuspec -Properties Configuration=$(ConfigurationName)
-del c:\Nuget\Complexion.*.nupkg
-xcopy $(TargetDir)*.nupkg c:\NuGet /y</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
