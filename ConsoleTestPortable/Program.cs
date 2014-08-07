@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Complexion.Portable;
-using Complexion.Portable.PlexObjects;
+using Complexion.Win.Connection;
 
 namespace ConsoleTestPortable
 {
@@ -14,41 +14,50 @@ namespace ConsoleTestPortable
         static void Main()
         {
             Console.WriteLine("MyPlex connection:");
+            var connectionHelper = new ConnectionHelper();
 
-            var plex = new MyPlexConnection();
-            plex.ConnectAsync(UserName, Password).Wait();
-
-            var servers = plex.Servers.Select(s => new Server(s, UserName, Password)).ToList();
-
-            foreach (var s in servers)
-                s.ConnectAsync().Wait();
+            IMyPlexConnection myPlexConnection = new MyPlexConnection(connectionHelper);
+            myPlexConnection.ConnectAsync(UserName, Password).Wait();
+            
+            var serversTask = myPlexConnection.CreateServerConnectionsAsync();
+            serversTask.Wait();
+            var servers = serversTask.Result;
             
             var server = servers.FirstOrDefault(s => s.IsOnLine);
 
             if (server != null)
+            {
+                Console.WriteLine(server.Name);
                 ShowNowPlaying(server);
+                ShowClients(server);
+            }
 
             // local connection
             Console.WriteLine();
             Console.WriteLine("Local server connection:");
 
-            var localServer = new Server(LocalServerIp);
+            var localServer = new PlexServerConnection(connectionHelper, LocalServerIp);
             localServer.ConnectAsync().Wait();
+
+            Console.WriteLine(localServer.Name);
             ShowNowPlaying(localServer);
+            ShowClients(localServer);
+
+            //localServer.PlayVideo(localServer.NowPlaying[0]).Wait();
 
             Console.ReadKey();
         }
 
-        private static void ShowNowPlaying(Server server)
+        private static void ShowClients(IPlexServerConnection server)
         {
-            Console.WriteLine(server.Name);
+            foreach (var client in server.Clients)
+                Console.WriteLine("Client - " + client.name);
+        }
 
-            var videosTask = server.GetNowPlayingAsync();
-            videosTask.Wait();
-
-            var videos = videosTask.Result;
-            foreach (var video in videos)
-                Console.WriteLine(video.title + " - " + video.ImdbLink);
+        private static void ShowNowPlaying(IPlexServerConnection plexServer)
+        {
+            foreach (var video in plexServer.NowPlaying)
+                Console.WriteLine(video.title + " - " + video.ImdbLink + " - " + video.Player.title);
         }
     }
 }

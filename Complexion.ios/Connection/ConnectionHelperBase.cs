@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Complexion.Portable.Connection;
 
-namespace Complexion.Portable.Connection
+// ReSharper disable once CheckNamespace
+namespace Complexion.Connection
 {
-    internal enum Method
-    {
-        Get,
-        Post,
-    }
-
-    internal static class ConnectionHelper
+    /// <summary>
+    /// Provides the base class for connections - this file can be shared between the mono and win versions
+    /// as the using directives match despite the assemblies being different.
+    /// </summary>
+    public class ConnectionHelperBase : IConnectionHelper
     {
         private static void CreatePlexRequest(HttpHeaders headers)
         {
@@ -24,7 +24,7 @@ namespace Complexion.Portable.Connection
             headers.Add("X-Plex-Version", "0");
         }
 
-        internal static async Task<T> MakeRequestAsync<T>(Method method, string baseUrl, string resource = "/",
+        public async Task<T> MakeRequestAsync<T>(Method method, string baseUrl, string resource = "/",
             string username = null, string password = null, int timeout = 20000)
             where T : class, new()
         {
@@ -49,7 +49,7 @@ namespace Complexion.Portable.Connection
                             case Method.Get:
                                 var responseBody = await client.GetStringAsync(requestUri);
                                 if (string.IsNullOrEmpty(responseBody))
-                                    return null;;
+                                    return null;
                                 return DeserializeResponse<T>(responseBody);
 
                             case Method.Post:
@@ -57,13 +57,13 @@ namespace Complexion.Portable.Connection
                                 response.EnsureSuccessStatusCode();
                                 var postResponseBody = await response.Content.ReadAsStringAsync();
                                 if (string.IsNullOrEmpty(postResponseBody))
-                                    return null;;
+                                    return null;
                                 return DeserializeResponse<T>(postResponseBody);
                         }
 
                         return null;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         return null;
                     }

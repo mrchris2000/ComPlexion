@@ -5,17 +5,17 @@
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2AA4A96D-F1A0-4CBF-8B10-B8932DE6F60C}</ProjectGuid>
+    <ProjectGuid>{167D5DEA-2D4D-40A6-A624-470CF1F4E817}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Complexion.Portable</RootNamespace>
-    <AssemblyName>Complexion.Portable</AssemblyName>
+    <RootNamespace>Complexion.Win</RootNamespace>
+    <AssemblyName>Complexion.Win</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\ComPlexion\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,34 +36,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Connection\enums.cs" />
-    <Compile Include="Connection\IConnectionHelper.cs" />
-    <Compile Include="Connection\ReflectionExtensions.cs" />
-    <Compile Include="Connection\StringExtensions.cs" />
-    <Compile Include="Connection\XmlDeserializer.cs" />
-    <Compile Include="Connection\XmlExtensions.cs" />
-    <Compile Include="Exceptions\NotConnectedToPlexException.cs" />
-    <Compile Include="IMyPlexConnection.cs" />
-    <Compile Include="IPlexServerConnection.cs" />
-    <Compile Include="ListExtensions.cs" />
-    <Compile Include="MyPlexConnection.cs" />
-    <Compile Include="ObservableCollectionEx.cs" />
-    <Compile Include="PlexObjects\Connection.cs" />
-    <Compile Include="PlexObjects\Device.cs" />
-    <Compile Include="PlexObjects\MediaContainer.cs" />
-    <Compile Include="PlexObjects\Player.cs" />
-    <Compile Include="PlexObjects\PlexObjectBase.cs" />
-    <Compile Include="PlexObjects\Response.cs" />
-    <Compile Include="PlexObjects\Server.cs" />
-    <Compile Include="PlexResources.cs" />
-    <Compile Include="PlexObjects\PlexUser.cs" />
-    <Compile Include="PlexObjects\Role.cs" />
-    <Compile Include="PlexServerConnection.cs" />
-    <Compile Include="PlexObjects\Video.cs" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\Complexion.Portable\Complexion.Portable.csproj">
+      <Project>{2aa4a96d-f1a0-4cbf-8b10-b8932de6f60c}</Project>
+      <Name>Complexion.Portable</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Complexion.ios\Connection\ConnectionHelperBase.cs">
+      <Link>Connection\ConnectionHelperBase.cs</Link>
+    </Compile>
+    <Compile Include="Connection\ConnectionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -73,14 +71,11 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -1,4 +1,4 @@
-﻿namespace Complexion.Portable.PlexObjects
+﻿namespace Complexion.Portable
 {
     public static class PlexResources
     {
@@ -8,5 +8,9 @@
         public const string MyPlexBaseUrl = "https://my.plexapp.com";
 
         public const string ServerSessions = "status/sessions";
+        public const string ServerClients = "clients";
+        
+        public const string ClientPause = "player/playback/pause";
+        public const string ClientPlay = "player/playback/play";
     }
 }
