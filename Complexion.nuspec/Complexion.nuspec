@@ -44,7 +44,6 @@
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.dll" target="lib\MonoTouch10\Complexion.Portable.dll" />
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.pdb" target="lib\MonoTouch10\Complexion.Portable.pdb" />
     <file src="..\Complexion.ios\bin\iPhone\$Configuration$\Complexion.ios.dll" target="lib\MonoTouch10\Complexion.ios.dll" />
-    <file src="..\Complexion.ios\bin\iPhone\$Configuration$\Complexion.ios.pdb" target="lib\MonoTouch10\Complexion.ios.pdb" />
     
     <!-- Win -->
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.dll" target="lib\portable-net45+win+wp80\Complexion.Portable.dll" />

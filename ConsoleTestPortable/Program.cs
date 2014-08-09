@@ -43,9 +43,7 @@ namespace ConsoleTestPortable
             Console.WriteLine(localServer.Name);
             ShowNowPlaying(localServer);
             ShowClients(localServer);
-
-            //localServer.PlayVideo(localServer.NowPlaying[0]).Wait();
-
+            
             Console.ReadKey();
         }
 
@@ -65,13 +63,13 @@ namespace ConsoleTestPortable
                 Console.WriteLine(video.Uri);
                 Console.WriteLine(video.SchemeUri);
 
-                Console.WriteLine("Cast:");
-                foreach (var role in video.Roles)
-                    Console.WriteLine(role.role + ": " + role.tag);
+                //Console.WriteLine("Cast:");
+                //foreach (var role in video.Roles)
+                //    Console.WriteLine(role.role + ": " + role.tag);
 
-                Console.WriteLine("Directors");
-                foreach (var director in video.Directors)
-                    Console.WriteLine(director.tag);
+                //Console.WriteLine("Directors");
+                //foreach (var director in video.Directors)
+                //    Console.WriteLine(director.tag);
             }
         }
     }
