@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Complexion.Portable.Connection;
 using Complexion.Portable.Exceptions;
 using Complexion.Portable.PlexObjects;
+using JimBobBennett.JimLib.Collections;
 
 namespace Complexion.Portable
 {
@@ -56,10 +57,12 @@ namespace Complexion.Portable
             Password = password;
         }
 
-        public PlexServerConnection(IConnectionHelper connectionHelper, string uri)
+        public PlexServerConnection(IConnectionHelper connectionHelper, string uri, string username = null, string password = null)
             : this(connectionHelper)
         {
             ConnectionUri = TidyUrl(uri);
+            Username = username;
+            Password = password;
         }
 
         public async Task ConnectAsync()

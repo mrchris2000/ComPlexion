@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="2.7.2">
     <id>Complexion</id>
-    <version>0.2.8-alpha</version>
+    <version>0.2.20-alpha</version>
     <title>Complexion Plex Media Server API</title>
     <authors>Jim Bennett</authors>
     <owners>Jim Bennett</owners>
@@ -29,6 +29,9 @@
         <dependency id="Microsoft.Bcl" version="1.1.9" />
         <dependency id="Microsoft.Bcl.Build" version="1.0.14" />
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
+      </group>
+      <group>
+        <dependency id="JimBobBennett.JimLib" version="1.0.13" />
       </group>
     </dependencies>
   </metadata>

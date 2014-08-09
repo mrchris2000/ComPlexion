@@ -72,7 +72,7 @@ namespace Complexion.Portable.Connection
 	    private void Map(object x, XElement root)
 		{
 			var objType = x.GetType().GetTypeInfo();
-			var props = objType.DeclaredProperties;
+			var props = objType.DeclaredProperties.Union(objType.BaseType.GetTypeInfo().DeclaredProperties);
 
 			foreach (var prop in props)
 			{
@@ -226,7 +226,7 @@ namespace Complexion.Portable.Connection
 			}
 		}
         
-		private void PopulateListFromElements(Type t, IEnumerable<XElement> elements, IList list)
+        private void PopulateListFromElements(Type t, IEnumerable<XElement> elements, IList list)
 		{
 			foreach (var element in elements)
 			{

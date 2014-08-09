@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Complexion.Portable.PlexObjects
 {
@@ -6,18 +7,81 @@ namespace Complexion.Portable.PlexObjects
     {
         public string title { get; set; }
         public string summary { get; set; }
+        public string tagline { get; set; }
         public string guid { get; set; }
         public string art { get; set; }
         public string thumb { get; set; }
         public long viewOffset { get; set; }
         public long duration { get; set; }
+        public int year { get; set; }
 
         public Player Player { get; set; }
         public List<Role> Roles { get; set; }
+        public List<Genre> Genres { get; set; }
+        public List<Producer> Producers { get; set; }
+        public List<Writer> Writers { get; set; }
+        public List<Director> Directors { get; set; }
 
-        public string ImdbLink
+        public string UriSource
         {
-            get { return guid.Replace("com.plexapp.agents.imdb://", "http://www.imdb.com/title/"); }
+            get
+            {
+                if (HasIMDBLink)
+                    return "IMDB";
+
+                if (HasTVDBLink)
+                    return "TheTVDB";
+
+                return null;
+            }
+        }
+
+        public Uri Uri
+        {
+            get
+            {
+                if (HasIMDBLink)
+                    return new Uri(guid.Replace("com.plexapp.agents.imdb://", "http://www.imdb.com/title/"));
+
+                if (HasTVDBLink)
+                {
+                    var bit = guid.Replace("com.plexapp.agents.thetvdb://", "");
+                    var bits = bit.Split('/');
+
+                    var series = bits[0];
+                    return new Uri("http://www.thetvdb.com/?tab=series&id=" + series);
+                }
+
+                return null;
+            }
+        }
+
+        private bool HasTVDBLink
+        {
+            get { return guid.StartsWith("com.plexapp.agents.thetvdb://"); }
+        }
+
+        private bool HasIMDBLink
+        {
+            get { return guid.StartsWith("com.plexapp.agents.imdb://", StringComparison.OrdinalIgnoreCase); }
+        }
+
+        public Uri SchemeUri
+        {
+            get
+            {
+                if (!HasIMDBLink)
+                    return null;
+
+                var imdbAppLink = guid.Replace("com.plexapp.agents.imdb://", "imdb:///title/");
+                var endLocation = imdbAppLink.IndexOf('?');
+                if (endLocation > -1)
+                    imdbAppLink = imdbAppLink.Substring(0, endLocation);
+
+                imdbAppLink += "/";
+
+                return new Uri(imdbAppLink);
+            }
         }
 
         protected override bool OnUpdateFrom(Video newValue)

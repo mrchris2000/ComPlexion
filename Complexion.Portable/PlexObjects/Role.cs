@@ -1,16 +1,14 @@
 ﻿namespace Complexion.Portable.PlexObjects
 {
-    public class Role : PlexObjectBase<Role>
+    public class Role : IdTagObjectBase<Role>
     {
-        public long id { get; set; }
         public string role { get; set; }
-        public string tag { get; set; }
         public string thumb { get; set; }
 
-        protected override bool OnUpdateFrom(Role newValue)
+        protected override bool OnUpdateFrom(IdTagObjectBase<Role> newValue)
         {
-            var isUpdated = UpdateValue(() => role, newValue);
-            isUpdated = UpdateValue(() => tag, newValue) | isUpdated;
+            var isUpdated = base.OnUpdateFrom(newValue);
+            isUpdated = UpdateValue(() => role, newValue) | isUpdated;
             isUpdated = UpdateValue(() => thumb, newValue) | isUpdated;
 
             return isUpdated;
