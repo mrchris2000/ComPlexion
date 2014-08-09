@@ -27,6 +27,7 @@ namespace ConsoleTestPortable
 
             if (server != null)
             {
+                Console.WriteLine();
                 Console.WriteLine(server.Name);
                 ShowNowPlaying(server);
                 ShowClients(server);
@@ -57,7 +58,21 @@ namespace ConsoleTestPortable
         private static void ShowNowPlaying(IPlexServerConnection plexServer)
         {
             foreach (var video in plexServer.NowPlaying)
-                Console.WriteLine(video.title + " - " + video.ImdbLink + " - " + video.Player.title);
+            {
+                Console.WriteLine(video.title);
+                Console.WriteLine("Playing on " + video.Player.title);
+                Console.WriteLine("Links:");
+                Console.WriteLine(video.Uri);
+                Console.WriteLine(video.SchemeUri);
+
+                Console.WriteLine("Cast:");
+                foreach (var role in video.Roles)
+                    Console.WriteLine(role.role + ": " + role.tag);
+
+                Console.WriteLine("Directors");
+                foreach (var director in video.Directors)
+                    Console.WriteLine(director.tag);
+            }
         }
     }
 }
