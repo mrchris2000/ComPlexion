@@ -83,10 +83,10 @@ namespace Complexion.Portable
                 throw new NotConnectedToPlexException(ex);
             }
 
-            await RefreshContainer();
+            await RefreshContainerAsync();
         }
 
-        public async Task RefreshContainer()
+        public async Task RefreshContainerAsync()
         {
             try
             {

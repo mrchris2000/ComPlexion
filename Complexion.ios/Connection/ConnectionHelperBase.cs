@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Complexion.Portable.Connection;
+using JimBobBennett.JimLib.Xml;
 
 // ReSharper disable once CheckNamespace
 namespace Complexion.Connection

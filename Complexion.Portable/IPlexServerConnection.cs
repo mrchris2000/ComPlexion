@@ -20,7 +20,7 @@ namespace Complexion.Portable
 
         Task ConnectAsync();
         Task RefreshAsync();
-        Task PauseVideo(Video video);
-        Task PlayVideo(Video video);
+        Task PauseVideoAsync(Video video);
+        Task PlayVideoAsync(Video video);
     }
 }

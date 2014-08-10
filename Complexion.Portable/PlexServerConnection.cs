@@ -194,7 +194,7 @@ namespace Complexion.Portable
             return container.Servers ?? new List<Server>();
         }
 
-        public async Task PauseVideo(Video video)
+        public async Task PauseVideoAsync(Video video)
         {
             if (video != null && video.Player != null && video.Player.Client != null)
             {
@@ -212,7 +212,7 @@ namespace Complexion.Portable
             }
         }
 
-        public async Task PlayVideo(Video video)
+        public async Task PlayVideoAsync(Video video)
         {
             if (video != null && video.Player != null && video.Player.Client != null)
             {

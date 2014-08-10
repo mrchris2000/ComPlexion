@@ -14,7 +14,7 @@ namespace Complexion.Portable
         ReadOnlyObservableCollection<Device> Players { get; }
         bool IsConnected { get; }
         Task ConnectAsync(string username, string password);
-        Task RefreshContainer();
+        Task RefreshContainerAsync();
         event EventHandler DevicesUpdated;
         Task<IEnumerable<IPlexServerConnection>> CreateServerConnectionsAsync();
     }
