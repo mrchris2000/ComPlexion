@@ -1,43 +1,44 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
+using JimBobBennett.JimLib;
 
 namespace Complexion.Portable.PlexObjects
 {
-    public abstract class PlexObjectBase<T>
+    public abstract class PlexObjectBase<T> : NotificationObject
     {
-        public event EventHandler Updated;
-
-        protected virtual void OnUpdated()
-        {
-            var handler = Updated;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        protected abstract bool OnUpdateFrom(T newValue);
+        protected abstract bool OnUpdateFrom(T newValue, List<string> updatedPropertyNames);
 
         public bool UpdateFrom(T newValue)
         {
-            var updated = OnUpdateFrom(newValue);
+            var updatedPropertyNames = new List<string>();
+            var updated = OnUpdateFrom(newValue, updatedPropertyNames);
 
-            if (updated) OnUpdated();
+            if (updated)
+            {
+                foreach (var updatedPropertyName in updatedPropertyNames)
+                    RaisePropertyChanged(updatedPropertyName);
+            }
 
             return updated;
         }
 
         public abstract string Key { get; }
 
-        protected bool UpdateValue<TValue>(Expression<Func<TValue>> propertyExpression, T newValue)
+        protected bool UpdateValue<TValue>(Expression<Func<TValue>> propertyExpression, T newValue,
+            List<string> updatedPropertyNames)
         {
-            var memberExpression = (MemberExpression)propertyExpression.Body;
-            var propertyInfo = (PropertyInfo)memberExpression.Member;
+            var propertyInfo = ExtractPropertyInfo(propertyExpression);
 
             var value = propertyInfo.GetValue(newValue);
+            var thisValue = propertyInfo.GetValue(this);
 
-            if (propertyInfo.GetValue(this).Equals(value))
+            if (Equals(thisValue, value))
                 return false;
 
             propertyInfo.SetValue(this, value);
+            updatedPropertyNames.Add(propertyInfo.Name);
+
             return true;
         }
     }

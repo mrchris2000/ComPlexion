@@ -1,22 +1,24 @@
-﻿namespace Complexion.Portable.PlexObjects
+﻿using System.Collections.Generic;
+
+namespace Complexion.Portable.PlexObjects
 {
     public class Connection : PlexObjectBase<Connection>
     {
-        public string uri { get; set; }
+        public string Uri { get; set; }
 
         public override string ToString()
         {
-            return uri;
+            return Uri;
         }
 
-        protected override bool OnUpdateFrom(Connection newValue)
+        protected override bool OnUpdateFrom(Connection newValue, List<string> updatedPropertyNames)
         {
             return false;
         }
 
         public override string Key
         {
-            get { return uri; }
+            get { return Uri; }
         }
     }
 }

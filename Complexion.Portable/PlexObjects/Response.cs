@@ -2,7 +2,7 @@
 {
     public class Response
     {
-        public long code { get; set; }
-        public string status { get; set; }
+        public long Code { get; set; }
+        public string Status { get; set; }
     }
 }

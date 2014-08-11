@@ -9,8 +9,9 @@
 
         public const string ServerSessions = "status/sessions";
         public const string ServerClients = "clients";
-        
+
         public const string ClientPause = "player/playback/pause";
         public const string ClientPlay = "player/playback/play";
+        public const string ClientStop = "player/playback/stop";
     }
 }

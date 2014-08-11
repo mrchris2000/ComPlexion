@@ -97,9 +97,9 @@ namespace Complexion.Portable
 
                 lock (_syncObj)
                 {
-                    updated = _devices.UpdateToMatch(container.Devices, d => d.clientIdentifier, UpdateDevice);
-                    _servers.UpdateToMatch(GetByProvides(container, "server"), d => d.clientIdentifier);
-                    _players.UpdateToMatch(GetByProvides(container, "player"), d => d.clientIdentifier);
+                    updated = _devices.UpdateToMatch(container.Devices, d => d.ClientIdentifier, UpdateDevice);
+                    _servers.UpdateToMatch(GetByProvides(container, "server"), d => d.ClientIdentifier);
+                    _players.UpdateToMatch(GetByProvides(container, "player"), d => d.ClientIdentifier);
                 }
 
                 if (updated) OnDevicesUpdated();
@@ -132,8 +132,8 @@ namespace Complexion.Portable
 
         private static ICollection<Device> GetByProvides(MediaContainer container, string provides)
         {
-            return container.Devices.Where(d => d.provides.Contains(provides))
-                .OrderByDescending(d => d.lastSeenAt).ToList();
+            return container.Devices.Where(d => d.Provides.Contains(provides))
+                .OrderByDescending(d => d.LastSeenAt).ToList();
         }
 
         public bool IsConnected { get { return _user != null; } }

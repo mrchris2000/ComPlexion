@@ -6,41 +6,101 @@ using System.Threading.Tasks;
 using Complexion.Portable.Connection;
 using Complexion.Portable.Exceptions;
 using Complexion.Portable.PlexObjects;
+using JimBobBennett.JimLib;
 using JimBobBennett.JimLib.Collections;
 
 namespace Complexion.Portable
 {
-    public class PlexServerConnection : IPlexServerConnection
+    public class PlexServerConnection : NotificationObject, IPlexServerConnection
     {
         private readonly IConnectionHelper _connectionHelper;
-
-        public Device Device { get; private set; }
-        public string Username { get; private set; }
-        public string Password { get; private set; }
-        public string ConnectionUri { get; private set; }
-
-        private readonly ObservableCollectionEx<Video> _nowPlaying = new ObservableCollectionEx<Video>();
-        private readonly ObservableCollectionEx<Server> _clients = new ObservableCollectionEx<Server>();
-
-        public ReadOnlyObservableCollection<Video> NowPlaying { get; private set; }
-        public ReadOnlyObservableCollection<Server> Clients { get; private set; } 
-        
+        private Device _device;
+        private string _username;
+        private string _password;
+        private string _connectionUri;
         private MediaContainer _mediaContainer;
 
-        public bool IsOnLine { get { return _mediaContainer != null; } }
-        public string Platform { get { return _mediaContainer != null ? _mediaContainer.platform : string.Empty; } }
-        public string MachineIdentifier { get { return _mediaContainer != null ? _mediaContainer.machineIdentifier : string.Empty; } }
+        [NotifyPropertyChangeDependency("Name")]
+        public Device Device
+        {
+            get { return _device; }
+            private set
+            {
+                if (Equals(Device, value)) return;
+                _device = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Username
+        {
+            get { return _username; }
+            private set
+            {
+                if (Equals(Username, value)) return;
+                _username = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Password
+        {
+            get { return _password; }
+            private set
+            {
+                if (Equals(Password, value)) return;
+                _password = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        [NotifyPropertyChangeDependency("Name")]
+        public string ConnectionUri
+        {
+            get { return _connectionUri; }
+            private set
+            {
+                if (Equals(ConnectionUri, value)) return;
+                _connectionUri = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        [NotifyPropertyChangeDependency("IsOnLine")]
+        [NotifyPropertyChangeDependency("Platform")]
+        [NotifyPropertyChangeDependency("MachineIdentifier")]
+        [NotifyPropertyChangeDependency("Name")]
+        public MediaContainer MediaContainer
+        {
+            get { return _mediaContainer; }
+            private set
+            {
+                if (Equals(MediaContainer, value)) return;
+                _mediaContainer = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsOnLine { get { return MediaContainer != null; } }
+        public string Platform { get { return MediaContainer != null ? MediaContainer.Platform : string.Empty; } }
+        public string MachineIdentifier { get { return MediaContainer != null ? MediaContainer.MachineIdentifier : string.Empty; } }
 
         public string Name
         {
             get
             {
-                if (_mediaContainer != null)
-                    return _mediaContainer.friendlyName;
+                if (MediaContainer != null)
+                    return MediaContainer.FriendlyName;
 
-                return Device != null ? Device.name : ConnectionUri;
+                return Device != null ? Device.Name : ConnectionUri;
             }
         }
+        
+        private readonly ObservableCollectionEx<Video> _nowPlaying = new ObservableCollectionEx<Video>();
+        private readonly ObservableCollectionEx<Server> _clients = new ObservableCollectionEx<Server>();
+
+        public ReadOnlyObservableCollection<Video> NowPlaying { get; private set; }
+        public ReadOnlyObservableCollection<Server> Clients { get; private set; }
 
         private PlexServerConnection(IConnectionHelper connectionHelper)
         {
@@ -68,12 +128,12 @@ namespace Complexion.Portable
         public async Task ConnectAsync()
         {
             if (Device != null)
-                await MakeConnectionAsync(Device.Connections, Username, Password);
+                await MakeConnectionAsync(Device.Connections);
             else
                 await TryConnectionAsync(ConnectionUri);
 
             if (IsOnLine)
-                await RefreshAsync();
+                await RefreshSessionAsync();
         }
 
         private static string TidyUrl(string uri)
@@ -87,16 +147,15 @@ namespace Complexion.Portable
             return uri;
         }
 
-        private async Task MakeConnectionAsync(IEnumerable<PlexObjects.Connection> connections, string username, 
-            string password)
+        private async Task MakeConnectionAsync(IEnumerable<PlexObjects.Connection> connections)
         {
-            foreach (var connection in connections.Where(c => c.uri != "http://:0"))
+            foreach (var connection in connections.Where(c => c.Uri != "http://:0"))
             {
                 try
                 {
-                    if (await TryConnectionAsync(connection.uri, username, password))
+                    if (await TryConnectionAsync(connection.Uri))
                     {
-                        ConnectionUri = connection.uri;
+                        ConnectionUri = connection.Uri;
                         return;
                     }
                 }
@@ -107,19 +166,50 @@ namespace Complexion.Portable
                 }
             }
 
-            _mediaContainer = null;
+            ClearMediaContainer();
         }
 
-        private async Task<bool> TryConnectionAsync(string uri, string username = null, string password = null)
+        private void ClearMediaContainer()
+        {
+            MediaContainer = null;
+            _nowPlaying.Clear();
+            _clients.Clear();
+        }
+
+        private async Task<bool> TryConnectionAsync(string uri)
         {
             var mediaContainer = await _connectionHelper.MakeRequestAsync<MediaContainer>(Method.Get, uri, "/", 
-                username, password);
+                Username, Password);
+
             if (mediaContainer == null) return false;
-            _mediaContainer = mediaContainer;
+
+            if (MediaContainer == null)
+            {
+                MediaContainer = mediaContainer;
+                await RefreshSessionAsync();
+            }
+            else
+            {
+                if (MediaContainer.UpdateFrom(mediaContainer))
+                    RaisePropertyChanged(() => MediaContainer);
+
+                await RefreshSessionAsync();
+            }
+
             return true;
         }
 
         public async Task RefreshAsync()
+        {
+            var connected = await TryConnectionAsync(ConnectionUri);
+
+            if (connected)
+                await RefreshSessionAsync();
+            else
+                ClearMediaContainer();
+        }
+
+        private async Task RefreshSessionAsync()
         {
             IList<Video> videos;
             IList<Server> clients;
@@ -176,8 +266,8 @@ namespace Complexion.Portable
 
             foreach (var video in container.Videos)
             {
-                video.art = ConnectionUri + video.art;
-                video.thumb = ConnectionUri + video.thumb;
+                video.Art = ConnectionUri + video.Art;
+                video.Thumb = ConnectionUri + video.Thumb;
             }
 
             return container.Videos;
@@ -191,28 +281,25 @@ namespace Complexion.Portable
             if (container == null)
                 throw new NotConnectedToPlexException();
 
-            return container.Servers ?? new List<Server>();
+            return container.Servers ?? new ObservableCollectionEx<Server>();
         }
 
         public async Task PauseVideoAsync(Video video)
         {
-            if (video != null && video.Player != null && video.Player.Client != null)
-            {
-                var client = video.Player.Client;
-
-                var clientUriBuilder = new UriBuilder
-                {
-                    Port = client.port,
-                    Host = client.host,
-                    Scheme = "http"
-                };
-
-                await _connectionHelper.MakeRequestAsync<Response>(Method.Get, clientUriBuilder.Uri.ToString(),
-                    PlexResources.ClientPause, Username, Password);
-            }
+            await ChangeClientPlayback(video, PlexResources.ClientPause);
         }
 
         public async Task PlayVideoAsync(Video video)
+        {
+            await ChangeClientPlayback(video, PlexResources.ClientPlay);
+        }
+
+        public async Task StopVideoAsync(Video video)
+        {
+            await ChangeClientPlayback(video, PlexResources.ClientStop);
+        }
+
+        private async Task ChangeClientPlayback(Video video, string action)
         {
             if (video != null && video.Player != null && video.Player.Client != null)
             {
@@ -220,13 +307,13 @@ namespace Complexion.Portable
 
                 var clientUriBuilder = new UriBuilder
                 {
-                    Port = client.port,
-                    Host = client.host,
+                    Port = client.Port,
+                    Host = client.Host,
                     Scheme = "http"
                 };
 
-                await _connectionHelper.MakeRequestAsync<Response>(Method.Get, clientUriBuilder.Uri.ToString(),
-                    PlexResources.ClientPlay, Username, Password);
+                await _connectionHelper.MakeRequestAsync<Response>(Method.Get, 
+                    clientUriBuilder.Uri.ToString(), action, Username, Password);
             }
         }
     }

@@ -7,17 +7,13 @@ namespace ConsoleTestPortable
 {
     static class Program
     {
-        private const string UserName = "";
-        private const string Password = "";
-        private const string LocalServerIp = "";
-
         static void Main()
         {
             Console.WriteLine("MyPlex connection:");
             var connectionHelper = new ConnectionHelper();
 
             IMyPlexConnection myPlexConnection = new MyPlexConnection(connectionHelper);
-            myPlexConnection.ConnectAsync(UserName, Password).Wait();
+            myPlexConnection.ConnectAsync(TestConstants.MyPlexUserName, TestConstants.MyPlexPassword).Wait();
             
             var serversTask = myPlexConnection.CreateServerConnectionsAsync();
             serversTask.Wait();
@@ -37,7 +33,7 @@ namespace ConsoleTestPortable
             Console.WriteLine();
             Console.WriteLine("Local server connection:");
 
-            var localServer = new PlexServerConnection(connectionHelper, LocalServerIp);
+            var localServer = new PlexServerConnection(connectionHelper, TestConstants.LocalServer);
             localServer.ConnectAsync().Wait();
 
             Console.WriteLine(localServer.Name);
@@ -50,15 +46,15 @@ namespace ConsoleTestPortable
         private static void ShowClients(IPlexServerConnection server)
         {
             foreach (var client in server.Clients)
-                Console.WriteLine("Client - " + client.name);
+                Console.WriteLine("Client - " + client.Name);
         }
 
         private static void ShowNowPlaying(IPlexServerConnection plexServer)
         {
             foreach (var video in plexServer.NowPlaying)
             {
-                Console.WriteLine(video.title);
-                Console.WriteLine("Playing on " + video.Player.title);
+                Console.WriteLine(video.Title);
+                Console.WriteLine("Playing on " + video.Player.Title);
                 Console.WriteLine("Links:");
                 Console.WriteLine(video.Uri);
                 Console.WriteLine(video.SchemeUri);

@@ -1,18 +1,23 @@
-﻿namespace Complexion.Portable.PlexObjects
+﻿using System.Collections.Generic;
+using JimBobBennett.JimLib;
+
+namespace Complexion.Portable.PlexObjects
 {
     public abstract class IdTagObjectBase<T> : PlexObjectBase<IdTagObjectBase<T>>
     {
-        public long id { get; set; }
-        public string tag { get; set; }
+        [NotifyPropertyChangeDependency("Key")]
+        public long Id { get; set; }
 
-        protected override bool OnUpdateFrom(IdTagObjectBase<T> newValue)
+        public string Tag { get; set; }
+
+        protected override bool OnUpdateFrom(IdTagObjectBase<T> newValue, List<string> updatedPropertyNames)
         {
-            return UpdateValue(() => tag, newValue);
+            return UpdateValue(() => Tag, newValue, updatedPropertyNames);
         }
 
         public override string Key
         {
-            get { return id.ToString(); }
+            get { return Id.ToString(); }
         }
     }
 }

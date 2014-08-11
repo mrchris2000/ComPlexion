@@ -1,26 +1,31 @@
-﻿namespace Complexion.Portable.PlexObjects
+﻿using System.Collections.Generic;
+using JimBobBennett.JimLib;
+
+namespace Complexion.Portable.PlexObjects
 {
     public class Server : PlexObjectBase<Server>
     {
-        public string name { get; set; }
-        public string host { get; set; }
-        public string address { get; set; }
-        public int port { get; set; }
-        public string machineIdentifier { get; set; }
+        public string Name { get; set; }
+        public string Host { get; set; }
+        public string Address { get; set; }
+        public int Port { get; set; }
 
-        protected override bool OnUpdateFrom(Server newValue)
+        [NotifyPropertyChangeDependency("Key")]
+        public string MachineIdentifier { get; set; }
+
+        protected override bool OnUpdateFrom(Server newValue, List<string> updatedPropertyNames)
         {
-            var isUpdated = UpdateValue(() => name, newValue);
-            isUpdated = UpdateValue(() => host, newValue) | isUpdated;
-            isUpdated = UpdateValue(() => address, newValue) | isUpdated;
-            isUpdated = UpdateValue(() => port, newValue) | isUpdated;
+            var isUpdated = UpdateValue(() => Name, newValue, updatedPropertyNames);
+            isUpdated = UpdateValue(() => Host, newValue, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Address, newValue, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Port, newValue, updatedPropertyNames) | isUpdated;
 
             return isUpdated;
         }
 
         public override string Key
         {
-            get { return machineIdentifier; }
+            get { return MachineIdentifier; }
         }
     }
 }

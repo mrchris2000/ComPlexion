@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="2.7.2">
     <id>Complexion</id>
-    <version>0.2.23-alpha</version>
+    <version>0.2.26-alpha</version>
     <title>Complexion Plex Media Server API</title>
     <authors>Jim Bennett</authors>
     <owners>Jim Bennett</owners>

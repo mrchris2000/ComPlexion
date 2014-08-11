@@ -1,29 +1,33 @@
-﻿namespace Complexion.Portable.PlexObjects
+﻿using System.Collections.Generic;
+
+namespace Complexion.Portable.PlexObjects
 {
     public class Player : PlexObjectBase<Player>
     {
-        public string machineIdentifier { get; set; } 
-        public string platform { get; set; } 
-        public string product { get; set; } 
-        public string state { get; set; } 
-        public string title { get; set; }
+        public string MachineIdentifier { get; set; } 
+        public string Platform { get; set; } 
+        public string Product { get; set; } 
+        public string State { get; set; } 
+        public string Title { get; set; }
 
         public Server Client { get; internal set; }
 
-        protected override bool OnUpdateFrom(Player newValue)
+        protected override bool OnUpdateFrom(Player newValue, List<string> updatedPropertyNames)
         {
-            var isUpdated = UpdateValue(() => title, newValue);
-            isUpdated = UpdateValue(() => platform, newValue) | isUpdated;
-            isUpdated = UpdateValue(() => product, newValue) | isUpdated;
-            isUpdated = UpdateValue(() => state, newValue) | isUpdated;
-            isUpdated = UpdateValue(() => title, newValue) | isUpdated;
+            var isUpdated = UpdateValue(() => Title, newValue, updatedPropertyNames);
+            isUpdated = UpdateValue(() => Platform, newValue, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Product, newValue, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => State, newValue, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Title, newValue, updatedPropertyNames) | isUpdated;
+
+            isUpdated = Client.UpdateFrom(newValue.Client) | isUpdated;
 
             return isUpdated;
         }
 
         public override string Key
         {
-            get { return machineIdentifier; }
+            get { return MachineIdentifier; }
         }
     }
 }

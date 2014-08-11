@@ -2,20 +2,20 @@
 {
     public class PlexUser
     {
-        public string username { get; set; }
+        public string Username { get; set; }
 
-        public string email { get; set; }
+        public string Email { get; set; }
 
-        public int id { get; set; }
+        public int Id { get; set; }
 
-        public string thumb { get; set; }
+        public string Thumb { get; set; }
 
-        public string queueEmail { get; set; }
+        public string QueueEmail { get; set; }
 
-        public string queueUid { get; set; }
+        public string QueueUid { get; set; }
 
-        public string cloudSyncDevice { get; set; }
+        public string CloudSyncDevice { get; set; }
 
-        public string authenticationToken { get; set; }
+        public string AuthenticationToken { get; set; }
     }
 }

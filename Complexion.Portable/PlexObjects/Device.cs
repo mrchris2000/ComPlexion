@@ -1,61 +1,67 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JimBobBennett.JimLib;
+using JimBobBennett.JimLib.Collections;
+using JimBobBennett.JimLib.Xml;
 
 namespace Complexion.Portable.PlexObjects
 {
     public class Device : PlexObjectBase<Device>
     {
-        public string name { get; set; }
-        public string publicAddress { get; set; }
-        public string product { get; set; }
-        public string productVersion { get; set; }
-        public string platform { get; set; }
-        public string platformVersion { get; set; }
-        public string device { get; set; }
-        public string model { get; set; }
-        public string vendor { get; set; }
-        public string provides { get; set; }
-        public string clientIdentifier { get; set; }
-        public string version { get; set; }
-        public string id { get; set; }
-        public string token { get; set; }
-        public long createdAt { get; set; }
-        public long lastSeenAt { get; set; }
-        public string screenResolution { get; set; }
-        public string screenDensity { get; set; }
+        [XmlNameMapping("Device")]
+        public string DeviceName { get; set; }
 
-        public List<Connection> Connections { get; set; }
+        [NotifyPropertyChangeDependency("Key")]
+        public string ClientIdentifier { get; set; }
+
+        public string Name { get; set; }
+        public string PublicAddress { get; set; }
+        public string Product { get; set; }
+        public string ProductVersion { get; set; }
+        public string Platform { get; set; }
+        public string PlatformVersion { get; set; }
+        public string Model { get; set; }
+        public string Vendor { get; set; }
+        public string Provides { get; set; }
+        public string Version { get; set; }
+        public string Id { get; set; }
+        public string Token { get; set; }
+        public long CreatedAt { get; set; }
+        public long LastSeenAt { get; set; }
+        public string ScreenResolution { get; set; }
+        public string ScreenDensity { get; set; }
+
+        public ObservableCollectionEx<Connection> Connections { get; set; }
 
         public override string ToString()
         {
-            return name;
+            return Name;
         }
 
-        protected override bool OnUpdateFrom(Device newDevice)
+        protected override bool OnUpdateFrom(Device newDevice, List<string> updatedPropertyNames)
         {
-            var isUpdated = UpdateValue(() => createdAt, newDevice);
-            isUpdated = UpdateValue(() => device, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => id, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => lastSeenAt, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => name, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => platform, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => platformVersion, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => productVersion, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => provides, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => publicAddress, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => screenDensity, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => screenResolution, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => token, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => vendor, newDevice) | isUpdated;
-            isUpdated = UpdateValue(() => version, newDevice) | isUpdated;
+            var isUpdated = UpdateValue(() => CreatedAt, newDevice, updatedPropertyNames);
+            isUpdated = UpdateValue(() => Id, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => LastSeenAt, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Name, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Platform, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => PlatformVersion, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => ProductVersion, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Provides, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => PublicAddress, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => ScreenDensity, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => ScreenResolution, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Token, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Vendor, newDevice, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Version, newDevice, updatedPropertyNames) | isUpdated;
 
-            foreach (var connection in Connections.ToList().Where(con => newDevice.Connections.All(c => c.uri != con.uri)))
+            foreach (var connection in Connections.ToList().Where(con => newDevice.Connections.All(c => c.Uri != con.Uri)))
             {
                 Connections.Remove(connection);
                 isUpdated = true;
             }
 
-            foreach (var connection in newDevice.Connections.Where(con => Connections.All(c => c.uri != con.uri)))
+            foreach (var connection in newDevice.Connections.Where(con => Connections.All(c => c.Uri != con.Uri)))
             {
                 Connections.Add(connection);
                 isUpdated = true;
@@ -66,7 +72,7 @@ namespace Complexion.Portable.PlexObjects
 
         public override string Key
         {
-            get { return clientIdentifier; }
+            get { return ClientIdentifier; }
         }
     }
 }

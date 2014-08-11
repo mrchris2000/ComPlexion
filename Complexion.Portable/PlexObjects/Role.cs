@@ -1,22 +1,22 @@
-﻿namespace Complexion.Portable.PlexObjects
+﻿using System.Collections.Generic;
+using JimBobBennett.JimLib.Xml;
+
+namespace Complexion.Portable.PlexObjects
 {
     public class Role : IdTagObjectBase<Role>
     {
-        public string role { get; set; }
-        public string thumb { get; set; }
+        [XmlNameMapping("Role")]
+        public string RoleName { get; set; }
 
-        protected override bool OnUpdateFrom(IdTagObjectBase<Role> newValue)
+        public string Thumb { get; set; }
+
+        protected override bool OnUpdateFrom(IdTagObjectBase<Role> newValue, List<string> updatedPropertyNames)
         {
-            var isUpdated = base.OnUpdateFrom(newValue);
-            isUpdated = UpdateValue(() => role, newValue) | isUpdated;
-            isUpdated = UpdateValue(() => thumb, newValue) | isUpdated;
+            var isUpdated = base.OnUpdateFrom(newValue, updatedPropertyNames);
+            isUpdated = UpdateValue(() => RoleName, newValue, updatedPropertyNames) | isUpdated;
+            isUpdated = UpdateValue(() => Thumb, newValue, updatedPropertyNames) | isUpdated;
 
             return isUpdated;
-        }
-
-        public override string Key
-        {
-            get { return id.ToString(); }
         }
     }
 }
