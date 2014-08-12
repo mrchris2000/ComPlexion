@@ -6,8 +6,8 @@ namespace Complexion.Portable.PlexObjects
     {
         public string MachineIdentifier { get; set; } 
         public string Platform { get; set; } 
-        public string Product { get; set; } 
-        public string State { get; set; } 
+        public string Product { get; set; }
+        public PlayerState State { get; set; } 
         public string Title { get; set; }
 
         public Server Client { get; internal set; }

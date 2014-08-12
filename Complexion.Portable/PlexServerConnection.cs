@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Complexion.Portable.Connection;
 using Complexion.Portable.Exceptions;
 using Complexion.Portable.PlexObjects;
-using JimBobBennett.JimLib;
 using JimBobBennett.JimLib.Collections;
+using JimBobBennett.JimLib.Mvvm;
 
 namespace Complexion.Portable
 {

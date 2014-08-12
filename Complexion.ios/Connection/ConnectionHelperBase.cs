@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Complexion.Portable.Connection;
+using Complexion.Portable.PlexObjects;
 using JimBobBennett.JimLib.Xml;
 
 // ReSharper disable once CheckNamespace
@@ -15,7 +16,7 @@ namespace Complexion.Connection
     /// </summary>
     public class ConnectionHelperBase : IConnectionHelper
     {
-        private static void CreatePlexRequest(HttpHeaders headers)
+        private static void CreatePlexRequest(HttpHeaders headers, PlexUser user)
         {
             headers.Add("X-Plex-Platform", "Windows");
             headers.Add("X-Plex-Platform-Version", "NT");
@@ -23,15 +24,18 @@ namespace Complexion.Connection
             headers.Add("X-Plex-Client-Identifier", "Complexion");
             headers.Add("X-Plex-Product", "PlexWMC");
             headers.Add("X-Plex-Version", "0");
+
+            if (user != null)
+                headers.Add("X-Plex-Token", user.AuthenticationToken);
         }
 
         public async Task<T> MakeRequestAsync<T>(Method method, string baseUrl, string resource = "/",
-            string username = null, string password = null, int timeout = 20000)
+            string username = null, string password = null, int timeout = 5000, PlexUser user = null)
             where T : class, new()
         {
             using (var clientHandler = new HttpClientHandler{UseCookies = false})
             {
-                if (!string.IsNullOrEmpty(username))
+                if (user == null && !string.IsNullOrEmpty(username))
                     clientHandler.Credentials = new NetworkCredential(username, password);
 
                 using (var client = new HttpClient(clientHandler))
@@ -40,8 +44,8 @@ namespace Complexion.Connection
                     {
                         client.BaseAddress = new Uri(baseUrl);
                         client.Timeout = new TimeSpan(0, 0, 0, 0, timeout);
-                        
-                        CreatePlexRequest(client.DefaultRequestHeaders);
+
+                        CreatePlexRequest(client.DefaultRequestHeaders, user);
 
                         var requestUri = new Uri(resource, UriKind.Relative);
 
@@ -64,7 +68,7 @@ namespace Complexion.Connection
 
                         return null;
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         return null;
                     }

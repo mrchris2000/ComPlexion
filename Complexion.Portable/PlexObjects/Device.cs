@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JimBobBennett.JimLib;
 using JimBobBennett.JimLib.Collections;
+using JimBobBennett.JimLib.Mvvm;
 using JimBobBennett.JimLib.Xml;
 
 namespace Complexion.Portable.PlexObjects

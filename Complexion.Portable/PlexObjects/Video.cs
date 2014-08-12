@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using JimBobBennett.JimLib;
+using System.ComponentModel;
 using JimBobBennett.JimLib.Collections;
+using JimBobBennett.JimLib.Mvvm;
 
 namespace Complexion.Portable.PlexObjects
 {
     public class Video : PlexObjectBase<Video>
     {
+        private Player _player;
+
         [NotifyPropertyChangeDependency("Key")]
         [NotifyPropertyChangeDependency("HasIMDBLink")]
         [NotifyPropertyChangeDependency("HasTVDBLink")]
@@ -20,11 +23,48 @@ namespace Complexion.Portable.PlexObjects
         public string Tagline { get; set; }
         public string Art { get; set; }
         public string Thumb { get; set; }
-        public long ViewOffset { get; set; }
-        public long Duration { get; set; }
-        public int Year { get; set; }
 
-        public Player Player { get; set; }
+        [NotifyPropertyChangeDependency("Progress")]
+        public double ViewOffset { get; set; }
+
+        [NotifyPropertyChangeDependency("Progress")]
+        public double Duration { get; set; }
+
+        public double Progress
+        {
+            get { return Duration <= 0 ? 0 : ViewOffset/Duration; }
+        }
+
+        public string PlayerName { get { return Player.Title; } }
+        
+        public int Year { get; set; }
+        public PlayerState State { get { return Player.State; } }
+
+        public Player Player
+        {
+            get { return _player; }
+            set
+            {
+                if (Equals(Player, value)) return;
+
+                if (_player != null)
+                    _player.PropertyChanged -= PlayerOnPropertyChanged;
+
+                _player = value;
+
+                if (_player != null)
+                    _player.PropertyChanged += PlayerOnPropertyChanged;
+            }
+        }
+
+        private void PlayerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == ExtractPropertyInfo(() => _player.State).Name)
+                RaisePropertyChanged(() => State);
+
+            if (e.PropertyName == ExtractPropertyInfo(() => _player.Title).Name)
+                RaisePropertyChanged(() => PlayerName);
+        }
 
         public ObservableCollectionEx<Role> Roles { get; set; }
         public ObservableCollectionEx<Genre> Genres { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Complexion.Portable;
+using Complexion.Portable.PlexObjects;
 using Complexion.Win.Connection;
 
 namespace ConsoleTestPortable
@@ -58,6 +59,10 @@ namespace ConsoleTestPortable
                 Console.WriteLine("Links:");
                 Console.WriteLine(video.Uri);
                 Console.WriteLine(video.SchemeUri);
+                Console.WriteLine(video.Player.State);
+
+                if (video.Player.State == PlayerState.Playing)
+                    Console.WriteLine("Position: " + video.Progress);
 
                 //Console.WriteLine("Cast:");
                 //foreach (var role in video.Roles)

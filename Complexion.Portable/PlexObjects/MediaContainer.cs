@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using JimBobBennett.JimLib;
 using JimBobBennett.JimLib.Collections;
+using JimBobBennett.JimLib.Mvvm;
 
 namespace Complexion.Portable.PlexObjects
 {

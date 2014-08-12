@@ -46,6 +46,7 @@
     <Compile Include="PlexObjects\Country.cs" />
     <Compile Include="PlexObjects\Device.cs" />
     <Compile Include="PlexObjects\Director.cs" />
+    <Compile Include="PlexObjects\Enums.cs" />
     <Compile Include="PlexObjects\Genre.cs" />
     <Compile Include="PlexObjects\IdTagObjectBase.cs" />
     <Compile Include="PlexObjects\MediaContainer.cs" />
@@ -72,7 +73,7 @@
       <HintPath>..\packages\Portable.BouncyCastle.1.7.0\lib\portable-net4+sl5+wp8+win8\crypto.dll</HintPath>
     </Reference>
     <Reference Include="JimBobBennett.JimLib">
-      <HintPath>..\packages\JimBobBennett.JimLib.1.0.24\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10\JimBobBennett.JimLib.dll</HintPath>
+      <HintPath>..\packages\JimBobBennett.JimLib.1.0.32\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10\JimBobBennett.JimLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

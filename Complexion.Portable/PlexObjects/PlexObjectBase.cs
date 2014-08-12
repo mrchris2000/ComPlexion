@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using JimBobBennett.JimLib;
+using JimBobBennett.JimLib.Mvvm;
 
 namespace Complexion.Portable.PlexObjects
 {
