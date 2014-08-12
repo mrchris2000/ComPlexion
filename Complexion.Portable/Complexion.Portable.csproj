@@ -39,6 +39,7 @@
     <Compile Include="Connection\enums.cs" />
     <Compile Include="Connection\IConnectionHelper.cs" />
     <Compile Include="Exceptions\NotConnectedToPlexException.cs" />
+    <Compile Include="Connection\ILocalServerDiscovery.cs" />
     <Compile Include="IMyPlexConnection.cs" />
     <Compile Include="IPlexServerConnection.cs" />
     <Compile Include="MyPlexConnection.cs" />

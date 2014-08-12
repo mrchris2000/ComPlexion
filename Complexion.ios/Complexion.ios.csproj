@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Connection\ConnectionHelper.cs" />
     <Compile Include="Connection\ConnectionHelperBase.cs" />
+    <Compile Include="Connection\LocalServerDiscovery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
