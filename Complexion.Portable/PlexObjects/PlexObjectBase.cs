@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using JimBobBennett.JimLib.Extensions;
 using JimBobBennett.JimLib.Mvvm;
 
 namespace Complexion.Portable.PlexObjects
@@ -28,7 +29,7 @@ namespace Complexion.Portable.PlexObjects
         protected bool UpdateValue<TValue>(Expression<Func<TValue>> propertyExpression, T newValue,
             List<string> updatedPropertyNames)
         {
-            var propertyInfo = ExtractPropertyInfo(propertyExpression);
+            var propertyInfo = this.ExtractPropertyInfo(propertyExpression);
 
             var value = propertyInfo.GetValue(newValue);
             var thisValue = propertyInfo.GetValue(this);

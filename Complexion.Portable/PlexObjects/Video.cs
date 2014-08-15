@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using JimBobBennett.JimLib.Collections;
+using JimBobBennett.JimLib.Extensions;
 using JimBobBennett.JimLib.Mvvm;
 
 namespace Complexion.Portable.PlexObjects
@@ -59,10 +60,10 @@ namespace Complexion.Portable.PlexObjects
 
         private void PlayerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == ExtractPropertyInfo(() => _player.State).Name)
+            if (e.PropertyName == this.ExtractPropertyInfo(() => _player.State).Name)
                 RaisePropertyChanged(() => State);
 
-            if (e.PropertyName == ExtractPropertyInfo(() => _player.Title).Name)
+            if (e.PropertyName == this.ExtractPropertyInfo(() => _player.Title).Name)
                 RaisePropertyChanged(() => PlayerName);
         }
 

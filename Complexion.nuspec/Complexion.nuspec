@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="2.7.2">
     <id>Complexion</id>
-    <version>0.2.40-alpha</version>
+    <version>0.2.41-alpha</version>
     <title>Complexion Plex Media Server API</title>
     <authors>Jim Bennett</authors>
     <owners>Jim Bennett</owners>
@@ -25,7 +25,7 @@
         <dependency id="Microsoft.Net.Http" version="2.2.22" />
       </group>
       <group>
-        <dependency id="JimBobBennett.JimLib" version="1.0.32" />
+        <dependency id="JimBobBennett.JimLib" version="1.0.37" />
       </group>
     </dependencies>
   </metadata>
@@ -33,16 +33,19 @@
     <!-- portable -->
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.dll" target="lib\portable-net45+win+wp80+MonoAndroid10+MonoTouch10\Complexion.Portable.dll" />
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.pdb" target="lib\portable-net45+win+wp80+MonoAndroid10+MonoTouch10\Complexion.Portable.pdb" />
+    <file src="..\Complexion.Portable\**\*.cs" target="src\Complexion.Portable" />
     
     <!-- ios -->
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.dll" target="lib\MonoTouch10\Complexion.Portable.dll" />
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.pdb" target="lib\MonoTouch10\Complexion.Portable.pdb" />
     <file src="..\Complexion.ios\bin\iPhone\$Configuration$\Complexion.ios.dll" target="lib\MonoTouch10\Complexion.ios.dll" />
+    <file src="..\Complexion.ios\**\*.cs" target="src\Complexion.ios" />
     
     <!-- Win -->
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.dll" target="lib\portable-net45+win+wp80\Complexion.Portable.dll" />
     <file src="..\Complexion.Portable\bin\$Configuration$\Complexion.Portable.pdb" target="lib\portable-net45+win+wp80\Complexion.Portable.pdb" />
     <file src="..\Complexion.Win\bin\$Configuration$\Complexion.Win.dll" target="lib\portable-net45+win+wp80\Complexion.Win.dll" />
     <file src="..\Complexion.Win\bin\$Configuration$\Complexion.Win.pdb" target="lib\portable-net45+win+wp80\Complexion.Win.pdb" />
+    <file src="..\Complexion.Win\**\*.cs" target="src\Complexion.Win" />
   </files>
 </package>

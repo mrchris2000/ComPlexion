@@ -51,7 +51,7 @@
     <PreBuildEvent>del $(TargetDir)*.nupkg</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir).nuget\NuGet.exe pack $(ProjectDir)Complexion.nuspec -Properties Configuration=$(ConfigurationName)
+    <PostBuildEvent>$(SolutionDir).nuget\NuGet.exe pack -Symbols $(ProjectDir)Complexion.nuspec -Properties Configuration=$(ConfigurationName)
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
